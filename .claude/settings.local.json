@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(kubectl apply *)",
+      "Bash(kubectl *)",
+      "Bash(/usr/libexec/java_home *)",
+      "Bash(export JAVA_HOME=/Users/caixinyun/Library/Java/JavaVirtualMachines/azul-21.0.10/Contents/Home)",
+      "Bash(/Users/caixinyun/Library/Java/JavaVirtualMachines/azul-21.0.10/Contents/Home/bin/java -version)",
+      "Bash(mvn clean *)",
+      "Bash(docker build *)",
+      "Bash(curl *)",
+      "Bash(lsof -ti:18080)",
+      "Bash(xargs kill *)",
+      "Bash(flutter --version)",
+      "Bash(flutter create *)",
+      "Bash(flutter pub *)"
+    ]
+  }
+}

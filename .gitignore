@@ -1,0 +1,42 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+.env.local
+*.local.yml
+*.local.yaml
+
+# React / Node
+admin/node_modules/
+admin/build/
+admin/.next/
+admin/npm-debug.log*
+admin/yarn-debug.log*
+admin/yarn-error.log*
+
+# Java / Maven
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+backend/HELP.md
+backend/*.log
+
+# Flutter / Dart
+mobile/.dart_tool/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/.packages
+mobile/.pub-cache/
+mobile/.pub/
+mobile/build/
+mobile/ios/Pods/
+mobile/ios/.symlinks/
+mobile/macos/Pods/
+mobile/android/.gradle/
+mobile/android/local.properties

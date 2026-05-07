@@ -1,0 +1,29 @@
+# syntax=docker/dockerfile:1.6
+#
+# Fast runtime-only image. Requires that ./mvnw or local Maven has already
+# produced target/ikindle-backend-*.jar (run `mvn package -DskipTests` first).
+# Use Dockerfile (full multi-stage) for clean-room CI builds.
+#
+FROM eclipse-temurin:21-jre-alpine
+
+LABEL org.opencontainers.image.title="ikindle-backend" \
+      org.opencontainers.image.description="iKindle 电子书阅读平台后端服务 (runtime image)" \
+      org.opencontainers.image.version="1.0.0"
+
+RUN apk add --no-cache curl tzdata && \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo "Asia/Shanghai" > /etc/timezone
+
+ENV TZ=Asia/Shanghai \
+    JAVA_OPTS="-XX:+UseG1GC -XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/./urandom"
+
+WORKDIR /app
+RUN mkdir -p /data/ikindle/uploads
+COPY target/ikindle-backend-1.0.0.jar app.jar
+
+EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
+  CMD curl -fsS http://localhost:8080/api/actuator/health || exit 1
+
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar /app/app.jar"]

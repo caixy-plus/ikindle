@@ -1,0 +1,68 @@
+- generic [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - complementary [ref=e4]:
+        - link "开发者控制台" [ref=e6] [cursor=pointer]:
+          - /url: /console
+        - navigation [ref=e7]:
+          - link "概览" [ref=e8] [cursor=pointer]:
+            - /url: /console
+            - img [ref=e9]
+            - generic [ref=e14]: 概览
+          - link "应用发布" [ref=e15] [cursor=pointer]:
+            - /url: /console/apps/submit
+            - img [ref=e16]
+            - generic [ref=e21]: 应用发布
+          - link "API Key" [ref=e22] [cursor=pointer]:
+            - /url: /console/api-keys
+            - img [ref=e23]
+            - generic [ref=e26]: API Key
+          - link "OAuth 应用" [ref=e27] [cursor=pointer]:
+            - /url: /console/applications
+            - img [ref=e28]
+            - generic [ref=e30]: OAuth 应用
+          - link "OAuth 接入指南" [ref=e31] [cursor=pointer]:
+            - /url: /console/oauth-guide
+            - img [ref=e32]
+            - generic [ref=e35]: OAuth 接入指南
+          - link "脑池接入指南" [ref=e36] [cursor=pointer]:
+            - /url: /console/brain-guide
+            - img [ref=e37]
+            - generic [ref=e45]: 脑池接入指南
+        - button [ref=e47]:
+          - img [ref=e48]
+      - generic [ref=e50]:
+        - generic [ref=e52]:
+          - img [ref=e54]
+          - generic [ref=e58]: 开发者
+          - button "退出登录" [ref=e59]:
+            - img [ref=e60]
+        - main [ref=e63]:
+          - generic [ref=e135]:
+            - generic [ref=e136]:
+              - heading "OAuth 应用" [level=1] [ref=e137]
+              - button "创建应用" [active] [ref=e138]:
+                - img [ref=e139]
+                - text: 创建应用
+            - paragraph [ref=e140]:
+              - text: 管理你的 OAuth 应用。需要接入文档?查看
+              - link "OAuth 接入指南 →" [ref=e141] [cursor=pointer]:
+                - /url: /console/oauth-guide
+            - generic [ref=e149]:
+              - generic [ref=e150]:
+                - heading "创建 OAuth 应用" [level=2] [ref=e151]
+                - button [ref=e152]:
+                  - img [ref=e153]
+              - generic [ref=e156]:
+                - textbox "应用名称" [ref=e157]
+                - textbox "官网地址 https://" [ref=e158]
+                - textbox "Redirect URIs (逗号分隔多个)" [ref=e159]
+                - textbox "应用描述" [ref=e160]
+              - generic [ref=e161]:
+                - button "取消" [ref=e162]
+                - button "创建" [ref=e163]
+            - generic [ref=e142]:
+              - img [ref=e143]
+              - paragraph [ref=e145]: 暂无 OAuth 应用
+              - button "创建第一个应用" [ref=e146]
+  - alert [ref=e134]

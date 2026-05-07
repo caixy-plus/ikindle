@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: ikindle
+data:
+  DB_HOST: "postgres"
+  DB_PORT: "5432"
+  DB_NAME: "ikindle"
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  SERVER_PORT: "8080"
+  UPLOAD_DIR: "/data/ikindle/uploads"
+  OSS_ENABLED: "false"
+  OAUTH_ENABLED: "true"
+  PUBLIC_BASE_URL: "http://api.ikindle.local/api/files/public"
+  SPRING_PROFILES_ACTIVE: "prod"

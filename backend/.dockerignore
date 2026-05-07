@@ -1,0 +1,13 @@
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.mvn/
+mvnw
+mvnw.cmd
+.git/
+.gitignore
+.DS_Store
+*.log
+README.md

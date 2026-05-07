@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+	<head>
+		<dateCreated>Fri Aug 01 2025 14:53:49 GMT+0800 (CST)</dateCreated>
+		<dateModified>Fri Aug 01 2025 14:53:49 GMT+0800 (CST)</dateModified>
+	</head>
+	<body>
+		<outline text="业务模块<= ikindle =>基础模块">
+			<outline text="通用字段与规范">
+				<outline text="字段">
+					<outline text="创建时间"></outline>
+					<outline text="更新时间"></outline>
+					<outline text="除了关系表其他所有表都要有上面的字段"></outline>
+				</outline>
+			</outline>
+			<outline text="字典管理">
+				<outline text="字典">
+					<outline text="类型 type"></outline>
+					<outline text="文本 label"></outline>
+					<outline text="值 value"></outline>
+					<outline text="描述"></outline>
+				</outline>
+			</outline>
+			<outline text="参数配置">
+				<outline text="配置定义">
+					<outline text="配置 key"></outline>
+					<outline text="名称 name"></outline>
+					<outline text="值类型"></outline>
+					<outline text="描述"></outline>
+				</outline>
+				<outline text="配置">
+					<outline text="名 key 继承定义"></outline>
+					<outline text="名称 name 继承定义"></outline>
+					<outline text="值 value"></outline>
+				</outline>
+			</outline>
+			<outline text="用户中心">
+				<outline text="用户">
+					<outline text="用户名 name"></outline>
+					<outline text="密码"></outline>
+					<outline text="昵称"></outline>
+					<outline text="头像"></outline>
+					<outline text="个性签名"></outline>
+					<outline text="启用状态"></outline>
+					<outline text="手机号"></outline>
+					<outline text="手机号是否验证"></outline>
+					<outline text="邮箱"></outline>
+					<outline text="邮箱是否验证"></outline>
+					<outline text="关联角色"></outline>
+				</outline>
+				<outline text="角色">
+					<outline text="名"></outline>
+					<outline text="文本"></outline>
+					<outline text="关联权限"></outline>
+				</outline>
+			</outline>
+			<outline text="菜单管理">
+				<outline text=" 导航">
+					<outline text="名 key"></outline>
+					<outline text="文本名 text"></outline>
+					<outline text="图标"></outline>
+					<outline text="样式图标"></outline>
+					<outline text="行为"></outline>
+					<outline text="行为类型"></outline>
+					<outline text="关联权限"></outline>
+				</outline>
+				<outline text="权限">
+					<outline text="名"></outline>
+					<outline text="文本"></outline>
+				</outline>
+				<outline text="功能">
+					<outline text="动作"></outline>
+					<outline text="文本"></outline>
+					<outline text="关联权限"></outline>
+				</outline>
+			</outline>
+			<outline text="同步管理">
+				<outline text="同步任务">
+					<outline text="订单id"></outline>
+					<outline text="图书资源"></outline>
+					<outline text="状态"></outline>
+				</outline>
+				<outline text="同步设置">
+					<outline text="优先级"></outline>
+					<outline text="同步邮箱"></outline>
+				</outline>
+			</outline>
+			<outline text="图书管理">
+				<outline text="图书">
+					<outline text="图片"></outline>
+					<outline text="价格"></outline>
+					<outline text="原价"></outline>
+					<outline text="简介"></outline>
+					<outline text="作者"></outline>
+					<outline text="评级"></outline>
+					<outline text="累计销量"></outline>
+				</outline>
+				<outline text="分类">
+					<outline text="名称"></outline>
+					<outline text="编码"></outline>
+				</outline>
+				<outline text="标签">
+					<outline text="名称"></outline>
+					<outline text="编码"></outline>
+				</outline>
+				<outline text="订单">
+					<outline text="金额"></outline>
+					<outline text="优惠金额"></outline>
+					<outline text="状态"></outline>
+				</outline>
+			</outline>
+			<outline text="资金账户">
+				<outline text="账户">
+					<outline text="余额"></outline>
+					<outline text="可用余额"></outline>
+					<outline text="冻结余额"></outline>
+				</outline>
+				<outline text="流水">
+					<outline text="交易金额"></outline>
+					<outline text="内容"></outline>
+				</outline>
+				<outline text="充值订单">
+					<outline text="订单号"></outline>
+					<outline text="金额"></outline>
+					<outline text="支付方式"></outline>
+					<outline text="状态"></outline>
+					<outline text="完成时间"></outline>
+				</outline>
+			</outline>
+		</outline>
+		<outline text="XMind: ZEN - Trial Version"></outline>
+	</body>
+</opml>

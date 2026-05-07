@@ -1,0 +1,121 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ikindle-backend
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:ikindle}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:qq123456}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+        use_sql_comments: false
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DATABASE:0}
+      timeout: 5000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 100MB
+
+  mail:
+    host: ${SMTP_HOST:smtp.163.com}
+    port: ${SMTP_PORT:465}
+    username: ${SMTP_USERNAME:18659195904@163.com}
+    password: ${SMTP_PASSWORD}
+    default-encoding: UTF-8
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+
+logging:
+  level:
+    com.ikindle: ${LOG_LEVEL:INFO}
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+ikindle:
+  jwt:
+    secret: ${JWT_SECRET:ikindle-secret-key-2024-very-long-and-secure-please-change}
+    expiration: ${JWT_EXPIRATION:86400000}
+  oauth:
+    enabled: ${OAUTH_ENABLED:false}
+    provider-name: ${OAUTH_PROVIDER_NAME:app_plat}
+    base-url: ${OAUTH_BASE_URL:https://api.local.caixy.xin}
+    client-id: ${OAUTH_CLIENT_ID:}
+    client-secret: ${OAUTH_CLIENT_SECRET:}
+    authorize-url: /api/v1/oauth/authorize
+    token-url: /api/v1/oauth/token
+    refresh-url: /api/v1/oauth/refresh
+    revoke-url: /api/v1/oauth/revoke
+    userinfo-url: /api/v1/oauth/userinfo
+  upload:
+    max-size: 50MB
+    allowed-types: jpg,jpeg,png,gif,pdf,epub,mobi
+    local-dir: ${UPLOAD_DIR:/data/ikindle/uploads}
+    public-base-url: ${UPLOAD_PUBLIC_URL:/api/files/public}
+  oss:
+    enabled: ${OSS_ENABLED:false}
+    endpoint: ${OSS_ENDPOINT:https://oss-cn-hangzhou.aliyuncs.com}
+    access-key-id: ${OSS_AK:}
+    access-key-secret: ${OSS_SK:}
+    bucket-name: ${OSS_BUCKET:ikindle-books}
+    url-prefix: ${OSS_URL_PREFIX:}
+  sync:
+    smtp:
+      host: ${SMTP_HOST:smtp.qq.com}
+      port: ${SMTP_PORT:465}
+      username: ${SMTP_USER:}
+      password: ${SMTP_PASS:}
+      from: ${SMTP_FROM:noreply@ikindle.local}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /api/actuator
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  swagger-ui:
+    path: /api/swagger-ui.html
+  api-docs:
+    path: /api/v3/api-docs

@@ -1,0 +1,208 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "应用商城" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e5]
+        - generic [ref=e10]: 应用商城
+      - navigation [ref=e11]:
+        - link "首页" [ref=e12] [cursor=pointer]:
+          - /url: /
+        - link "应用列表" [ref=e13] [cursor=pointer]:
+          - /url: /apps
+      - generic [ref=e14]:
+        - link "搜索" [ref=e15] [cursor=pointer]:
+          - /url: /apps
+          - img [ref=e16]
+        - button "登录" [active] [ref=e19]:
+          - img [ref=e20]
+          - text: 登录
+  - generic [ref=e219]:
+    - button [ref=e220]:
+      - img [ref=e221]
+    - heading "登录" [level=2] [ref=e224]
+    - generic [ref=e225]:
+      - generic [ref=e226]:
+        - generic [ref=e227]: 邮箱
+        - generic [ref=e228]:
+          - img [ref=e229]
+          - textbox "your@email.com" [ref=e232]
+      - generic [ref=e233]:
+        - generic [ref=e234]: 密码
+        - generic [ref=e235]:
+          - img [ref=e236]
+          - textbox "至少6位字符" [ref=e239]
+      - button "登录" [ref=e240]
+    - generic [ref=e243]: 或
+    - button "GitHub 登录" [ref=e245]:
+      - img [ref=e246]
+      - generic [ref=e248]: GitHub 登录
+    - paragraph [ref=e249]:
+      - text: 还没有账号？
+      - button "立即注册" [ref=e250]
+  - main [ref=e23]:
+    - generic [ref=e24]:
+      - generic [ref=e30]:
+        - heading "发现优质应用" [level=1] [ref=e31]
+        - paragraph [ref=e32]: 汇聚来自 GitHub 的优质开源应用，一键发现、安全下载
+        - generic [ref=e33]:
+          - img [ref=e34]
+          - textbox "搜索应用名称、功能..." [ref=e37]
+          - button "搜索" [ref=e38]
+        - generic [ref=e39]:
+          - link "开发工具" [ref=e40] [cursor=pointer]:
+            - /url: /apps?category=1
+          - link "效率办公" [ref=e41] [cursor=pointer]:
+            - /url: /apps?category=2
+          - link "媒体娱乐" [ref=e42] [cursor=pointer]:
+            - /url: /apps?category=3
+          - link "系统工具" [ref=e43] [cursor=pointer]:
+            - /url: /apps?category=4
+          - link "网络通信" [ref=e44] [cursor=pointer]:
+            - /url: /apps?category=5
+      - generic [ref=e46]:
+        - generic [ref=e47]:
+          - heading "应用分类" [level=2] [ref=e48]
+          - link "全部应用" [ref=e49] [cursor=pointer]:
+            - /url: /apps
+            - text: 全部应用
+            - img [ref=e50]
+        - generic [ref=e52]:
+          - link "开发工具" [ref=e53] [cursor=pointer]:
+            - /url: /apps?category=1
+            - img [ref=e55]
+            - generic [ref=e59]: 开发工具
+          - link "效率办公" [ref=e60] [cursor=pointer]:
+            - /url: /apps?category=2
+            - img [ref=e62]
+            - generic [ref=e66]: 效率办公
+          - link "媒体娱乐" [ref=e67] [cursor=pointer]:
+            - /url: /apps?category=3
+            - img [ref=e69]
+            - generic [ref=e72]: 媒体娱乐
+          - link "系统工具" [ref=e73] [cursor=pointer]:
+            - /url: /apps?category=4
+            - img [ref=e75]
+            - generic [ref=e79]: 系统工具
+          - link "网络通信" [ref=e80] [cursor=pointer]:
+            - /url: /apps?category=5
+            - img [ref=e82]
+            - generic [ref=e86]: 网络通信
+          - link "设计创意" [ref=e87] [cursor=pointer]:
+            - /url: /apps?category=6
+            - img [ref=e89]
+            - generic [ref=e96]: 设计创意
+          - link "游戏娱乐" [ref=e97] [cursor=pointer]:
+            - /url: /apps?category=7
+            - img [ref=e99]
+            - generic [ref=e102]: 游戏娱乐
+          - link "教育学习" [ref=e103] [cursor=pointer]:
+            - /url: /apps?category=8
+            - img [ref=e105]
+            - generic [ref=e108]: 教育学习
+      - generic [ref=e110]:
+        - generic [ref=e111]:
+          - heading "热门应用" [level=2] [ref=e112]
+          - link "查看更多" [ref=e113] [cursor=pointer]:
+            - /url: /apps
+            - text: 查看更多
+            - img [ref=e114]
+        - generic [ref=e116]:
+          - link "hiddify-app hiddify-app Multi-platform auto-proxy client, supporting Sing-box, X-ray, TUIC, Hysteria, Reality, Trojan, SSH etc. It’s an open-source, secure and ad-free." [ref=e117] [cursor=pointer]:
+            - /url: /apps/hiddify-app-23
+            - generic [ref=e118]:
+              - img "hiddify-app" [ref=e120]
+              - generic [ref=e121]:
+                - heading "hiddify-app" [level=3] [ref=e122]
+                - paragraph [ref=e123]: Multi-platform auto-proxy client, supporting Sing-box, X-ray, TUIC, Hysteria, Reality, Trojan, SSH etc. It’s an open-source, secure and ad-free.
+          - link "spotube spotube 🎧 Open source music streaming app! Available for both desktop & mobile!" [ref=e124] [cursor=pointer]:
+            - /url: /apps/spotube-14
+            - generic [ref=e125]:
+              - img "spotube" [ref=e127]
+              - generic [ref=e128]:
+                - heading "spotube" [level=3] [ref=e129]
+                - paragraph [ref=e130]: 🎧 Open source music streaming app! Available for both desktop & mobile!
+          - link "gopeed gopeed A fast, modern download manager for HTTP, BitTorrent, Magnet, and ed2k. Cross-platform, built with Golang and Flutter." [ref=e131] [cursor=pointer]:
+            - /url: /apps/gopeed-18
+            - generic [ref=e132]:
+              - img "gopeed" [ref=e134]
+              - generic [ref=e135]:
+                - heading "gopeed" [level=3] [ref=e136]
+                - paragraph [ref=e137]: A fast, modern download manager for HTTP, BitTorrent, Magnet, and ed2k. Cross-platform, built with Golang and Flutter.
+          - link "rustdesk rustdesk An open-source remote desktop application designed for self-hosting, as an alternative to TeamViewer." [ref=e138] [cursor=pointer]:
+            - /url: /apps/rustdesk-17
+            - generic [ref=e139]:
+              - img "rustdesk" [ref=e141]
+              - generic [ref=e142]:
+                - heading "rustdesk" [level=3] [ref=e143]
+                - paragraph [ref=e144]: An open-source remote desktop application designed for self-hosting, as an alternative to TeamViewer.
+          - link "photon photon Photon is a cross-platform file and folder transfer application built using flutter. It uses http to transfer files between devices. You can transfer files between any devices that run Photon." [ref=e145] [cursor=pointer]:
+            - /url: /apps/photon-21
+            - generic [ref=e146]:
+              - img "photon" [ref=e148]
+              - generic [ref=e149]:
+                - heading "photon" [level=3] [ref=e150]
+                - paragraph [ref=e151]: Photon is a cross-platform file and folder transfer application built using flutter. It uses http to transfer files between devices. You can transfer files between any devices that run Photon.
+          - 'link "logseq logseq A privacy-first, open-source platform for knowledge management and collaboration. Download link: http://github.com/logseq/logseq/releases. roadmap: https://logseq.io/p/NX4mc_ggEV" [ref=e152] [cursor=pointer]':
+            - /url: /apps/logseq-12
+            - generic [ref=e153]:
+              - img "logseq" [ref=e155]
+              - generic [ref=e156]:
+                - heading "logseq" [level=3] [ref=e157]
+                - paragraph [ref=e158]: "A privacy-first, open-source platform for knowledge management and collaboration. Download link: http://github.com/logseq/logseq/releases. roadmap: https://logseq.io/p/NX4mc_ggEV"
+      - generic [ref=e160]:
+        - generic [ref=e161]:
+          - heading "最新上架" [level=2] [ref=e162]
+          - link "查看更多" [ref=e163] [cursor=pointer]:
+            - /url: /apps
+            - text: 查看更多
+            - img [ref=e164]
+        - generic [ref=e166]:
+          - link "应用商城 应用商城 应用商城官方客户端 - 发现优质应用，支持 Android、macOS、Windows 多端下载 1 浏览" [ref=e167] [cursor=pointer]:
+            - /url: /apps/54
+            - generic [ref=e168]:
+              - img "应用商城" [ref=e170]
+              - generic [ref=e171]:
+                - heading "应用商城" [level=3] [ref=e172]
+                - paragraph [ref=e173]: 应用商城官方客户端 - 发现优质应用，支持 Android、macOS、Windows 多端下载
+                - generic [ref=e175]: 1 浏览
+          - link "xournalpp xournalpp Xournal++ is a handwriting notetaking software with PDF annotation support. Written in C++ with GTK3, supporting Linux (e.g. Ubuntu, Debian, Arch, SUSE), macOS and Windows 10. Supports pen input from devices such as Wacom Tablets." [ref=e176] [cursor=pointer]:
+            - /url: /apps/xournalpp-53
+            - generic [ref=e177]:
+              - img "xournalpp" [ref=e179]
+              - generic [ref=e180]:
+                - heading "xournalpp" [level=3] [ref=e181]
+                - paragraph [ref=e182]: Xournal++ is a handwriting notetaking software with PDF annotation support. Written in C++ with GTK3, supporting Linux (e.g. Ubuntu, Debian, Arch, SUSE), macOS and Windows 10. Supports pen input from devices such as Wacom Tablets.
+          - link "Lorien Lorien Infinite canvas drawing/whiteboarding app for Windows, Linux and macOS. Made with Godot. 1 浏览" [ref=e183] [cursor=pointer]:
+            - /url: /apps/lorien-52
+            - generic [ref=e184]:
+              - img "Lorien" [ref=e186]
+              - generic [ref=e187]:
+                - heading "Lorien" [level=3] [ref=e188]
+                - paragraph [ref=e189]: Infinite canvas drawing/whiteboarding app for Windows, Linux and macOS. Made with Godot.
+                - generic [ref=e191]: 1 浏览
+          - 'link "OpenRA OpenRA Open Source real-time strategy game engine for early Westwood games such as Command & Conquer: Red Alert written in C# using SDL and OpenGL. Runs on Windows, Linux, *BSD and Mac OS X. 1 浏览" [ref=e192] [cursor=pointer]':
+            - /url: /apps/openra-51
+            - generic [ref=e193]:
+              - img "OpenRA" [ref=e195]
+              - generic [ref=e196]:
+                - heading "OpenRA" [level=3] [ref=e197]
+                - paragraph [ref=e198]: "Open Source real-time strategy game engine for early Westwood games such as Command & Conquer: Red Alert written in C# using SDL and OpenGL. Runs on Windows, Linux, *BSD and Mac OS X."
+                - generic [ref=e200]: 1 浏览
+          - link "pcsx2 pcsx2 PCSX2 - The Playstation 2 Emulator" [ref=e201] [cursor=pointer]:
+            - /url: /apps/pcsx2-50
+            - generic [ref=e202]:
+              - img "pcsx2" [ref=e204]
+              - generic [ref=e205]:
+                - heading "pcsx2" [level=3] [ref=e206]
+                - paragraph [ref=e207]: PCSX2 - The Playstation 2 Emulator
+          - link "keepassxc keepassxc KeePassXC is a cross-platform community-driven port of the Windows application “KeePass Password Safe”." [ref=e208] [cursor=pointer]:
+            - /url: /apps/keepassxc-49
+            - generic [ref=e209]:
+              - img "keepassxc" [ref=e211]
+              - generic [ref=e212]:
+                - heading "keepassxc" [level=3] [ref=e213]
+                - paragraph [ref=e214]: KeePassXC is a cross-platform community-driven port of the Windows application “KeePass Password Safe”.
+  - contentinfo [ref=e215]:
+    - generic [ref=e216]: 应用商城 - 发现更多优质应用
+  - alert [ref=e217]
