@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -62,13 +64,16 @@ class _HomeBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final booksAsync = ref.watch(homeBooksProvider);
     final categoriesAsync = ref.watch(homeCategoriesProvider);
+    final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
     return SafeArea(
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.all(16.w),
+              padding: isDesktop
+                  ? const EdgeInsets.all(24)
+                  : EdgeInsets.all(16.w),
               child: TextField(
                 readOnly: true,
                 onTap: () => context.push('/category'),
@@ -78,7 +83,9 @@ class _HomeBody extends ConsumerWidget {
                   filled: true,
                   fillColor: AppColors.background,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24.r),
+                    borderRadius: isDesktop
+                        ? const BorderRadius.all(Radius.circular(24))
+                        : BorderRadius.circular(24.r),
                     borderSide: BorderSide.none,
                   ),
                 ),
@@ -87,19 +94,23 @@ class _HomeBody extends ConsumerWidget {
           ),
           SliverToBoxAdapter(
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 16.w),
-              height: 140.h,
+              margin: isDesktop
+                  ? const EdgeInsets.symmetric(horizontal: 24)
+                  : EdgeInsets.symmetric(horizontal: 16.w),
+              height: isDesktop ? 160 : 140.h,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   colors: [AppColors.primary, AppColors.primaryDark],
                 ),
-                borderRadius: BorderRadius.circular(12.r),
+                borderRadius: isDesktop
+                    ? const BorderRadius.all(Radius.circular(16))
+                    : BorderRadius.circular(12.r),
               ),
               child: Center(
                 child: Text(
                   '知识无界，阅读不停',
                   style: TextStyle(
-                    fontSize: 20.sp,
+                    fontSize: isDesktop ? 24 : 20.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -109,7 +120,9 @@ class _HomeBody extends ConsumerWidget {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 8.h),
+              padding: isDesktop
+                  ? const EdgeInsets.fromLTRB(24, 32, 24, 12)
+                  : EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 8.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -124,7 +137,9 @@ class _HomeBody extends ConsumerWidget {
           ),
           booksAsync.when(
             data: (books) => SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              padding: isDesktop
+                  ? const EdgeInsets.symmetric(horizontal: 24)
+                  : EdgeInsets.symmetric(horizontal: 16.w),
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => _BookCard(book: books[index]),
@@ -151,25 +166,35 @@ class _BookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+
     return Card(
-      margin: EdgeInsets.only(bottom: 12.h),
+      margin: isDesktop
+          ? const EdgeInsets.only(bottom: 16)
+          : EdgeInsets.only(bottom: 12.h),
       child: InkWell(
         onTap: () => context.push('/book/${book.id}'),
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: isDesktop
+            ? const BorderRadius.all(Radius.circular(12))
+            : BorderRadius.circular(12.r),
         child: Padding(
-          padding: EdgeInsets.all(12.w),
+          padding: isDesktop
+              ? const EdgeInsets.all(16)
+              : EdgeInsets.all(12.w),
           child: Row(
             children: [
               Container(
-                width: 80.w,
-                height: 110.h,
+                width: isDesktop ? 90 : 80.w,
+                height: isDesktop ? 120 : 110.h,
                 decoration: BoxDecoration(
                   color: AppColors.primaryLight,
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: isDesktop
+                      ? const BorderRadius.all(Radius.circular(8))
+                      : BorderRadius.circular(8.r),
                 ),
                 child: const Icon(Icons.book, color: AppColors.primary),
               ),
-              SizedBox(width: 12.w),
+              SizedBox(width: isDesktop ? 16 : 12.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,17 +205,17 @@ class _BookCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 4.h),
+                    SizedBox(height: isDesktop ? 6 : 4.h),
                     Text(
                       book.author,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: isDesktop ? 10 : 8.h),
                     if (book.price != null)
                       Text(
                         '¥${book.price}',
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: isDesktop ? 18 : 16.sp,
                           fontWeight: FontWeight.bold,
                           color: AppColors.error,
                         ),

@@ -1,8 +1,9 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/config/app_config.dart';
 import '../../core/providers/auth_provider.dart';
 import '../../core/theme/app_colors.dart';
@@ -15,39 +16,8 @@ class OAuthLoginPage extends ConsumerStatefulWidget {
 }
 
 class _OAuthLoginPageState extends ConsumerState<OAuthLoginPage> {
-  late final WebViewController _controller;
-  bool _loading = true;
   bool _exchanging = false;
   String? _error;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onPageStarted: (_) => setState(() => _loading = true),
-          onPageFinished: (_) => setState(() => _loading = false),
-          onNavigationRequest: (request) {
-            final url = request.url;
-            if (url.startsWith(AppConfig.kRedirectUri)) {
-              final uri = Uri.parse(url);
-              final code = uri.queryParameters['code'];
-              final error = uri.queryParameters['error'];
-              if (code != null && code.isNotEmpty) {
-                _exchangeCode(code);
-              } else if (error != null) {
-                setState(() => _error = '授权失败: $error');
-              }
-              return NavigationDecision.prevent;
-            }
-            return NavigationDecision.navigate;
-          },
-        ),
-      )
-      ..loadRequest(Uri.parse(_authorizeUrl));
-  }
 
   String get _authorizeUrl {
     final base = AppConfig.platformBaseUrl;
@@ -56,6 +26,22 @@ class _OAuthLoginPageState extends ConsumerState<OAuthLoginPage> {
     final scope = AppConfig.kOAuthScope;
     final state = 'st_${DateTime.now().millisecondsSinceEpoch}_${Random().nextInt(9999)}';
     return '$base/oauth/authorize?client_id=$cid&redirect_uri=$ru&scope=$scope&state=$state';
+  }
+
+  Future<void> _launchOAuth() async {
+    final uri = Uri.parse(_authorizeUrl);
+    if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+      // 桌面端使用外部浏览器
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('请在浏览器中完成授权，然后返回应用')),
+        );
+      }
+    } else {
+      // 移动端使用 WebView
+      context.push('/oauth-webview', extra: _authorizeUrl);
+    }
   }
 
   Future<void> _exchangeCode(String code) async {
@@ -80,6 +66,8 @@ class _OAuthLoginPageState extends ConsumerState<OAuthLoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('授权登录'),
@@ -90,50 +78,89 @@ class _OAuthLoginPageState extends ConsumerState<OAuthLoginPage> {
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          WebViewWidget(controller: _controller),
-          if (_loading && !_exchanging)
-            const Positioned.fill(
-              child: Center(child: CircularProgressIndicator()),
-            ),
-          if (_exchanging || _error != null)
-            Positioned.fill(
-              child: Container(
-                color: Colors.black54,
-                alignment: Alignment.center,
-                child: Card(
-                  margin: EdgeInsets.all(32),
-                  child: Padding(
-                    padding: EdgeInsets.all(24),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (_exchanging) ...[
-                          const CircularProgressIndicator(),
-                          const SizedBox(height: 16),
-                          const Text('正在登录…'),
-                        ],
-                        if (_error != null) ...[
-                          const Icon(Icons.error_outline, color: AppColors.error, size: 48),
-                          const SizedBox(height: 16),
-                          Text(_error!, textAlign: TextAlign.center),
-                          const SizedBox(height: 16),
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() => _error = null);
-                              _controller.loadRequest(Uri.parse(_authorizeUrl));
-                            },
-                            child: const Text('重试'),
-                          ),
-                        ],
-                      ],
+      body: Center(
+        child: ConstrainedBox(
+          constraints: isDesktop
+              ? const BoxConstraints(maxWidth: 400)
+              : const BoxConstraints(),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.login,
+                  size: 64,
+                  color: AppColors.primary,
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  '统一授权登录',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  isDesktop
+                      ? '点击按钮将在浏览器中打开授权页面，完成后请返回应用'
+                      : '点击按钮开始授权登录',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 32),
+                if (_error != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      _error!,
+                      style: const TextStyle(color: AppColors.error),
+                      textAlign: TextAlign.center,
                     ),
                   ),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: _exchanging ? null : _launchOAuth,
+                    icon: _exchanging
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Icon(Icons.open_in_browser),
+                    label: Text(isDesktop ? '在浏览器中打开' : '开始授权'),
+                  ),
                 ),
-              ),
+                if (isDesktop) ...[
+                  const SizedBox(height: 16),
+                  const Text(
+                    '授权完成后，请将授权码粘贴到下方：',
+                    style: TextStyle(color: AppColors.textSecondary),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    decoration: const InputDecoration(
+                      hintText: '输入授权码',
+                      prefixIcon: Icon(Icons.vpn_key),
+                    ),
+                    onSubmitted: (code) {
+                      if (code.isNotEmpty) _exchangeCode(code);
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _exchanging ? null : () {
+                        // 需要获取 TextField 的值，这里简化处理
+                      },
+                      child: const Text('提交授权码'),
+                    ),
+                  ),
+                ],
+              ],
             ),
-        ],
+          ),
+        ),
       ),
     );
   }

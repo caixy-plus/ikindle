@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -83,6 +85,7 @@ class _BookshelfList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncValue = ref.watch(bookshelfProvider(syncStatus));
+    final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
     return asyncValue.when(
       data: (result) {
@@ -90,7 +93,9 @@ class _BookshelfList extends ConsumerWidget {
           return const Center(child: Text('暂无图书'));
         }
         return ListView.builder(
-          padding: EdgeInsets.all(16.w),
+          padding: isDesktop
+              ? const EdgeInsets.all(24)
+              : EdgeInsets.all(16.w),
           itemCount: result.items.length,
           itemBuilder: (context, index) {
             final item = result.items[index];
@@ -110,25 +115,35 @@ class _BookshelfCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+
     return Card(
-      margin: EdgeInsets.only(bottom: 12.h),
+      margin: isDesktop
+          ? const EdgeInsets.only(bottom: 16)
+          : EdgeInsets.only(bottom: 12.h),
       child: InkWell(
         onTap: () => context.push('/book/${item.bookId}'),
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: isDesktop
+            ? const BorderRadius.all(Radius.circular(12))
+            : BorderRadius.circular(12.r),
         child: Padding(
-          padding: EdgeInsets.all(12.w),
+          padding: isDesktop
+              ? const EdgeInsets.all(16)
+              : EdgeInsets.all(12.w),
           child: Row(
             children: [
               Container(
-                width: 70.w,
-                height: 95.h,
+                width: isDesktop ? 80 : 70.w,
+                height: isDesktop ? 110 : 95.h,
                 decoration: BoxDecoration(
                   color: AppColors.primaryLight,
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: isDesktop
+                      ? const BorderRadius.all(Radius.circular(8))
+                      : BorderRadius.circular(8.r),
                 ),
                 child: const Icon(Icons.book, color: AppColors.primary),
               ),
-              SizedBox(width: 12.w),
+              SizedBox(width: isDesktop ? 16 : 12.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,13 +154,13 @@ class _BookshelfCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 4.h),
+                    SizedBox(height: isDesktop ? 6 : 4.h),
                     if (item.author != null)
                       Text(
                         item.author!,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: isDesktop ? 10 : 8.h),
                     Row(
                       children: [
                         _StatusChip(status: item.syncStatus),
@@ -154,7 +169,7 @@ class _BookshelfCard extends StatelessWidget {
                           Text(
                             '${(item.progress! * 100).toInt()}%',
                             style: TextStyle(
-                              fontSize: 12.sp,
+                              fontSize: isDesktop ? 13 : 12.sp,
                               color: AppColors.textTertiary,
                             ),
                           ),
@@ -207,15 +222,24 @@ class _StatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+      padding: isDesktop
+          ? const EdgeInsets.symmetric(horizontal: 10, vertical: 3)
+          : EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
       decoration: BoxDecoration(
         color: _color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(4.r),
+        borderRadius: isDesktop
+            ? const BorderRadius.all(Radius.circular(4))
+            : BorderRadius.circular(4.r),
       ),
       child: Text(
         _label,
-        style: TextStyle(fontSize: 11.sp, color: _color),
+        style: TextStyle(
+          fontSize: isDesktop ? 12 : 11.sp,
+          color: _color,
+        ),
       ),
     );
   }

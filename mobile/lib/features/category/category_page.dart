@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,6 +36,7 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     final categoriesAsync = ref.watch(categoryListProvider);
+    final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
     return Scaffold(
       appBar: AppBar(title: const Text('分类')),
@@ -46,7 +49,7 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
           return Row(
             children: [
               Container(
-                width: 100.w,
+                width: isDesktop ? 120 : 100.w,
                 color: AppColors.background,
                 child: ListView.builder(
                   itemCount: categories.length,
@@ -58,14 +61,16 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                           setState(() => _selectedCategoryId = cat.id),
                       child: Container(
                         padding: EdgeInsets.symmetric(
-                            vertical: 16.h, horizontal: 12.w),
+                          vertical: isDesktop ? 18 : 16.h,
+                          horizontal: isDesktop ? 16 : 12.w,
+                        ),
                         color: isSelected
                             ? AppColors.surface
                             : Colors.transparent,
                         child: Text(
                           cat.name,
                           style: TextStyle(
-                            fontSize: 14.sp,
+                            fontSize: isDesktop ? 15 : 14.sp,
                             fontWeight: isSelected
                                 ? FontWeight.bold
                                 : FontWeight.normal,
@@ -99,17 +104,18 @@ class _BookGrid extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final booksAsync = ref.watch(booksByCategoryProvider(categoryId));
+    final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
     return booksAsync.when(
       data: (books) {
         if (books.isEmpty) return const Center(child: Text('该分类暂无图书'));
         return GridView.builder(
-          padding: EdgeInsets.all(12.w),
+          padding: EdgeInsets.all(isDesktop ? 16 : 12.w),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.65,
-            crossAxisSpacing: 12.w,
-            mainAxisSpacing: 12.h,
+            crossAxisCount: isDesktop ? 3 : 2,
+            childAspectRatio: isDesktop ? 0.7 : 0.65,
+            crossAxisSpacing: isDesktop ? 16 : 12.w,
+            mainAxisSpacing: isDesktop ? 16 : 12.h,
           ),
           itemCount: books.length,
           itemBuilder: (context, index) {
@@ -130,6 +136,8 @@ class _CategoryBookCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -145,7 +153,7 @@ class _CategoryBookCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(8.w),
+              padding: EdgeInsets.all(isDesktop ? 12 : 8.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -155,19 +163,19 @@ class _CategoryBookCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 4.h),
+                  SizedBox(height: isDesktop ? 6 : 4.h),
                   Text(
                     book.author,
                     style: Theme.of(context).textTheme.bodySmall,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 4.h),
+                  SizedBox(height: isDesktop ? 6 : 4.h),
                   if (book.price != null)
                     Text(
                       '¥${book.price}',
                       style: TextStyle(
-                        fontSize: 14.sp,
+                        fontSize: isDesktop ? 15 : 14.sp,
                         fontWeight: FontWeight.bold,
                         color: AppColors.error,
                       ),

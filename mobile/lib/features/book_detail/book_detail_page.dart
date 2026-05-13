@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,6 +23,7 @@ class BookDetailPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncBook = ref.watch(bookDetailProvider(bookId));
+    final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
     return Scaffold(
       appBar: AppBar(title: const Text('图书详情')),
@@ -31,7 +34,9 @@ class BookDetailPage extends ConsumerWidget {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(16.w),
+          padding: isDesktop
+              ? const EdgeInsets.all(24)
+              : EdgeInsets.all(16.w),
           child: asyncBook.when(
             data: (book) => _AddToShelfButton(bookId: bookId),
             loading: () => const ElevatedButton(
@@ -112,23 +117,29 @@ class _BookDetailBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+
     return SingleChildScrollView(
-      padding: EdgeInsets.all(16.w),
+      padding: isDesktop
+          ? const EdgeInsets.all(24)
+          : EdgeInsets.all(16.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
             child: Container(
-              width: 160.w,
-              height: 220.h,
+              width: isDesktop ? 180 : 160.w,
+              height: isDesktop ? 240 : 220.h,
               decoration: BoxDecoration(
                 color: AppColors.primaryLight,
-                borderRadius: BorderRadius.circular(12.r),
+                borderRadius: isDesktop
+                    ? const BorderRadius.all(Radius.circular(12))
+                    : BorderRadius.circular(12.r),
               ),
               child: const Icon(Icons.book, size: 64, color: AppColors.primary),
             ),
           ),
-          SizedBox(height: 24.h),
+          SizedBox(height: isDesktop ? 32 : 24.h),
           Text(
             book.title,
             style: Theme.of(context).textTheme.headlineMedium,
@@ -138,7 +149,7 @@ class _BookDetailBody extends StatelessWidget {
               book.subtitle!,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-          SizedBox(height: 12.h),
+          SizedBox(height: isDesktop ? 16 : 12.h),
           Row(
             children: [
               if (book.rating != null)
@@ -148,23 +159,23 @@ class _BookDetailBody extends StatelessWidget {
                     Text(' ${book.rating}'),
                   ],
                 ),
-              SizedBox(width: 16.w),
+              SizedBox(width: isDesktop ? 20 : 16.w),
               if (book.price != null)
                 Text(
                   '¥${book.price}',
                   style: TextStyle(
-                    fontSize: 20.sp,
+                    fontSize: isDesktop ? 22 : 20.sp,
                     fontWeight: FontWeight.bold,
                     color: AppColors.error,
                   ),
                 ),
               if (book.originalPrice != null)
                 Padding(
-                  padding: EdgeInsets.only(left: 8.w),
+                  padding: EdgeInsets.only(left: isDesktop ? 10 : 8.w),
                   child: Text(
                     '¥${book.originalPrice}',
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: isDesktop ? 15 : 14.sp,
                       color: AppColors.textTertiary,
                       decoration: TextDecoration.lineThrough,
                     ),
@@ -172,14 +183,14 @@ class _BookDetailBody extends StatelessWidget {
                 ),
             ],
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: isDesktop ? 20 : 16.h),
           _InfoRow(label: '作者', value: book.author),
-          SizedBox(height: 8.h),
+          SizedBox(height: isDesktop ? 10 : 8.h),
           if (book.salesCount != null)
             _InfoRow(label: '销量', value: '${book.salesCount}'),
-          SizedBox(height: 24.h),
+          SizedBox(height: isDesktop ? 32 : 24.h),
           Text('内容简介', style: Theme.of(context).textTheme.titleMedium),
-          SizedBox(height: 8.h),
+          SizedBox(height: isDesktop ? 10 : 8.h),
           Text(
             book.description ?? '暂无简介',
             style: Theme.of(context).textTheme.bodyMedium,
@@ -197,19 +208,21 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+
     return Row(
       children: [
         Text(
           '$label: ',
           style: TextStyle(
-            fontSize: 14.sp,
+            fontSize: isDesktop ? 14 : 14.sp,
             color: AppColors.textSecondary,
           ),
         ),
         Text(
           value,
           style: TextStyle(
-            fontSize: 14.sp,
+            fontSize: isDesktop ? 14 : 14.sp,
             color: AppColors.textPrimary,
             fontWeight: FontWeight.w500,
           ),

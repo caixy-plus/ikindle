@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -39,6 +41,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
+    final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
     ref.listen(authStateProvider, (prev, next) {
       next.whenOrNull(
@@ -50,98 +53,111 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'iKindle',
-                style: TextStyle(
-                  fontSize: 36.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                '知识无界，阅读不停',
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: AppColors.textSecondary,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 48.h),
-              ElevatedButton.icon(
-                onPressed: () => context.push('/oauth-login'),
-                icon: const Icon(Icons.login),
-                label: const Text('统一授权登录'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(vertical: 14.h),
-                ),
-              ),
-              SizedBox(height: 24.h),
-              Row(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: isDesktop
+                ? const BoxConstraints(maxWidth: 420)
+                : const BoxConstraints(),
+            child: Padding(
+              padding: isDesktop
+                  ? const EdgeInsets.symmetric(horizontal: 32)
+                  : EdgeInsets.symmetric(horizontal: 24.w),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Expanded(child: Divider()),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Text(
-                      '或',
-                      style: TextStyle(color: AppColors.textTertiary),
+                  Text(
+                    'iKindle',
+                    style: TextStyle(
+                      fontSize: isDesktop ? 42 : 36.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: isDesktop ? 10 : 8.h),
+                  Text(
+                    '知识无界，阅读不停',
+                    style: TextStyle(
+                      fontSize: isDesktop ? 15 : 14.sp,
+                      color: AppColors.textSecondary,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: isDesktop ? 56 : 48.h),
+                  ElevatedButton.icon(
+                    onPressed: () => context.push('/oauth-login'),
+                    icon: const Icon(Icons.login),
+                    label: const Text('统一授权登录'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: EdgeInsets.symmetric(
+                        vertical: isDesktop ? 16 : 14.h,
+                      ),
                     ),
                   ),
-                  const Expanded(child: Divider()),
+                  SizedBox(height: isDesktop ? 28 : 24.h),
+                  Row(
+                    children: [
+                      const Expanded(child: Divider()),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isDesktop ? 18 : 16.w,
+                        ),
+                        child: Text(
+                          '或',
+                          style: TextStyle(color: AppColors.textTertiary),
+                        ),
+                      ),
+                      const Expanded(child: Divider()),
+                    ],
+                  ),
+                  SizedBox(height: isDesktop ? 28 : 24.h),
+                  TextField(
+                    controller: _usernameController,
+                    decoration: const InputDecoration(
+                      hintText: '用户名',
+                      prefixIcon: Icon(Icons.person_outline),
+                    ),
+                  ),
+                  SizedBox(height: isDesktop ? 18 : 16.h),
+                  TextField(
+                    controller: _passwordController,
+                    obscureText: _obscurePassword,
+                    decoration: InputDecoration(
+                      hintText: '密码',
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onPressed: () => setState(
+                            () => _obscurePassword = !_obscurePassword),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: isDesktop ? 36 : 32.h),
+                  ElevatedButton(
+                    onPressed: authState.isLoading ? null : _login,
+                    child: authState.isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text('账号密码登录'),
+                  ),
+                  SizedBox(height: isDesktop ? 18 : 16.h),
+                  TextButton(
+                    onPressed: () => context.push('/register'),
+                    child: const Text('还没有账号？去注册'),
+                  ),
                 ],
               ),
-              SizedBox(height: 24.h),
-              TextField(
-                controller: _usernameController,
-                decoration: const InputDecoration(
-                  hintText: '用户名',
-                  prefixIcon: Icon(Icons.person_outline),
-                ),
-              ),
-              SizedBox(height: 16.h),
-              TextField(
-                controller: _passwordController,
-                obscureText: _obscurePassword,
-                decoration: InputDecoration(
-                  hintText: '密码',
-                  prefixIcon: const Icon(Icons.lock_outline),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                    onPressed: () => setState(
-                        () => _obscurePassword = !_obscurePassword),
-                  ),
-                ),
-              ),
-              SizedBox(height: 32.h),
-              ElevatedButton(
-                onPressed: authState.isLoading ? null : _login,
-                child: authState.isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Text('账号密码登录'),
-              ),
-              SizedBox(height: 16.h),
-              TextButton(
-                onPressed: () => context.push('/register'),
-                child: const Text('还没有账号？去注册'),
-              ),
-            ],
+            ),
           ),
         ),
       ),
