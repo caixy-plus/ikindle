@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/api/api_client.dart';
 import '../../core/providers/api_provider.dart';
+import '../../core/providers/auth_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/book.dart';
 import '../../data/models/category.dart';
@@ -64,6 +65,8 @@ class _HomeBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final booksAsync = ref.watch(homeBooksProvider);
     final categoriesAsync = ref.watch(homeCategoriesProvider);
+    final authState = ref.watch(authStateProvider);
+    final isLoggedIn = authState.valueOrNull != null;
     final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
     return SafeArea(
@@ -74,21 +77,29 @@ class _HomeBody extends ConsumerWidget {
               padding: isDesktop
                   ? const EdgeInsets.all(24)
                   : EdgeInsets.all(16.w),
-              child: TextField(
-                readOnly: true,
-                onTap: () => context.push('/category'),
-                decoration: InputDecoration(
-                  hintText: '搜索书名、作者',
-                  prefixIcon: const Icon(Icons.search),
-                  filled: true,
-                  fillColor: AppColors.background,
-                  border: OutlineInputBorder(
-                    borderRadius: isDesktop
-                        ? const BorderRadius.all(Radius.circular(24))
-                        : BorderRadius.circular(24.r),
-                    borderSide: BorderSide.none,
+              child: Column(
+                children: [
+                  TextField(
+                    readOnly: true,
+                    onTap: () => context.push('/category'),
+                    decoration: InputDecoration(
+                      hintText: '搜索书名、作者',
+                      prefixIcon: const Icon(Icons.search),
+                      filled: true,
+                      fillColor: AppColors.background,
+                      border: OutlineInputBorder(
+                        borderRadius: isDesktop
+                            ? const BorderRadius.all(Radius.circular(24))
+                            : BorderRadius.circular(24.r),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
                   ),
-                ),
+                  if (!isLoggedIn) ...[
+                    SizedBox(height: isDesktop ? 16 : 12.h),
+                    _buildGuestBanner(context, isDesktop),
+                  ],
+                ],
               ),
             ),
           ),
@@ -153,6 +164,40 @@ class _HomeBody extends ConsumerWidget {
             error: (e, _) => SliverToBoxAdapter(
               child: Center(child: Text('加载失败: $e')),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGuestBanner(BuildContext context, bool isDesktop) {
+    return Container(
+      padding: isDesktop
+          ? const EdgeInsets.symmetric(horizontal: 16, vertical: 12)
+          : EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+      decoration: BoxDecoration(
+        color: AppColors.primary.withOpacity(0.1),
+        borderRadius: isDesktop
+            ? const BorderRadius.all(Radius.circular(12))
+            : BorderRadius.circular(12.r),
+        border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.info_outline, color: AppColors.primary, size: isDesktop ? 20 : 18.sp),
+          SizedBox(width: isDesktop ? 10 : 8.w),
+          Expanded(
+            child: Text(
+              '您当前以访客身份浏览，登录后可使用书架等功能',
+              style: TextStyle(
+                fontSize: isDesktop ? 13 : 12.sp,
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () => context.push('/login'),
+            child: const Text('去登录'),
           ),
         ],
       ),

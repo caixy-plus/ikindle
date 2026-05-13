@@ -61,6 +61,14 @@ class _BookshelfPageState extends ConsumerState<BookshelfPage>
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authStateProvider);
+    final isLoggedIn = authState.valueOrNull != null;
+    final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+
+    if (!isLoggedIn) {
+      return _buildLoginPrompt(context, isDesktop);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('我的书架'),
@@ -73,6 +81,65 @@ class _BookshelfPageState extends ConsumerState<BookshelfPage>
       body: TabBarView(
         controller: _tabController,
         children: _tabs.map((t) => _BookshelfList(syncStatus: t.$2)).toList(),
+      ),
+    );
+  }
+
+  Widget _buildLoginPrompt(BuildContext context, bool isDesktop) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('我的书架')),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: isDesktop
+              ? const BoxConstraints(maxWidth: 400)
+              : const BoxConstraints(),
+          child: Padding(
+            padding: isDesktop
+                ? const EdgeInsets.all(32)
+                : EdgeInsets.all(24.w),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.menu_book,
+                  size: isDesktop ? 80 : 64.sp,
+                  color: AppColors.textTertiary,
+                ),
+                SizedBox(height: isDesktop ? 24 : 16.h),
+                Text(
+                  '登录后查看书架',
+                  style: TextStyle(
+                    fontSize: isDesktop ? 20 : 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                SizedBox(height: isDesktop ? 12 : 8.h),
+                Text(
+                  '将喜欢的图书加入书架，随时阅读',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: isDesktop ? 14 : 13.sp,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+                SizedBox(height: isDesktop ? 32 : 24.h),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => context.push('/login'),
+                    child: const Text('立即登录'),
+                  ),
+                ),
+                SizedBox(height: isDesktop ? 16 : 12.h),
+                TextButton(
+                  onPressed: () => context.push('/register'),
+                  child: const Text('还没有账号？去注册'),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -14,7 +14,12 @@ class ProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateProvider);
     final user = authState.valueOrNull;
+    final isLoggedIn = user != null;
     final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
+
+    if (!isLoggedIn) {
+      return _buildLoginPrompt(context, isDesktop);
+    }
 
     return Scaffold(
       appBar: AppBar(title: const Text('我的')),
@@ -29,6 +34,65 @@ class ProfilePage extends ConsumerWidget {
               SizedBox(height: isDesktop ? 24 : 16.h),
               _buildMenuCard(context, ref, isDesktop),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginPrompt(BuildContext context, bool isDesktop) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('我的')),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: isDesktop
+              ? const BoxConstraints(maxWidth: 400)
+              : const BoxConstraints(),
+          child: Padding(
+            padding: isDesktop
+                ? const EdgeInsets.all(32)
+                : EdgeInsets.all(24.w),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.person_outline,
+                  size: isDesktop ? 80 : 64.sp,
+                  color: AppColors.textTertiary,
+                ),
+                SizedBox(height: isDesktop ? 24 : 16.h),
+                Text(
+                  '登录后查看个人中心',
+                  style: TextStyle(
+                    fontSize: isDesktop ? 20 : 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                SizedBox(height: isDesktop ? 12 : 8.h),
+                Text(
+                  '管理您的订单、充值和 Kindle 设置',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: isDesktop ? 14 : 13.sp,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+                SizedBox(height: isDesktop ? 32 : 24.h),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => context.push('/login'),
+                    child: const Text('立即登录'),
+                  ),
+                ),
+                SizedBox(height: isDesktop ? 16 : 12.h),
+                TextButton(
+                  onPressed: () => context.push('/register'),
+                  child: const Text('还没有账号？去注册'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

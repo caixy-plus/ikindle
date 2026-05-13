@@ -13,6 +13,14 @@ import '../../features/order/order_page.dart';
 import '../../features/recharge/recharge_page.dart';
 import '../providers/auth_provider.dart';
 
+// 需要登录才能访问的页面
+final _authRequiredRoutes = [
+  '/bookshelf',
+  '/orders',
+  '/recharge',
+  '/profile',
+];
+
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateProvider);
 
@@ -20,16 +28,27 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/',
     redirect: (context, state) {
       final isLoggedIn = authState.valueOrNull != null;
-      final isAuthRoute = state.matchedLocation == '/login' ||
-          state.matchedLocation == '/register' ||
-          state.matchedLocation == '/oauth-login';
+      final location = state.matchedLocation;
+      
+      // 认证相关页面
+      final isAuthRoute = location == '/login' ||
+          location == '/register' ||
+          location == '/oauth-login';
 
-      if (!isLoggedIn && !isAuthRoute) {
-        return '/oauth-login';
+      // 检查当前页面是否需要登录
+      final requiresAuth = _authRequiredRoutes.any((route) => 
+        location == route || location.startsWith('$route/'));
+
+      // 未登录且访问需要登录的页面 -> 跳转到登录
+      if (!isLoggedIn && requiresAuth) {
+        return '/login';
       }
+      
+      // 已登录且访问登录页 -> 跳转到首页
       if (isLoggedIn && isAuthRoute) {
         return '/';
       }
+      
       return null;
     },
     routes: [

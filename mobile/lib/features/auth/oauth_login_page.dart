@@ -18,6 +18,7 @@ class OAuthLoginPage extends ConsumerStatefulWidget {
 class _OAuthLoginPageState extends ConsumerState<OAuthLoginPage> {
   bool _exchanging = false;
   String? _error;
+  final _codeController = TextEditingController();
 
   String get _authorizeUrl {
     final base = AppConfig.platformBaseUrl;
@@ -65,16 +66,29 @@ class _OAuthLoginPageState extends ConsumerState<OAuthLoginPage> {
   }
 
   @override
+  void dispose() {
+    _codeController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isDesktop = Platform.isWindows || Platform.isMacOS || Platform.isLinux;
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.canPop() ? context.pop() : context.go('/'),
+        ),
         title: const Text('授权登录'),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: AppColors.textPrimary,
         actions: [
           TextButton(
             onPressed: () => context.push('/login'),
-            child: const Text('账号密码登录', style: TextStyle(color: Colors.white)),
+            child: const Text('账号密码登录', style: TextStyle(color: AppColors.primary)),
           ),
         ],
       ),
@@ -131,28 +145,42 @@ class _OAuthLoginPageState extends ConsumerState<OAuthLoginPage> {
                   ),
                 ),
                 if (isDesktop) ...[
+                  const SizedBox(height: 24),
+                  const Row(
+                    children: [
+                      Expanded(child: Divider()),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Text('或'),
+                      ),
+                      Expanded(child: Divider()),
+                    ],
+                  ),
                   const SizedBox(height: 16),
                   const Text(
                     '授权完成后，请将授权码粘贴到下方：',
                     style: TextStyle(color: AppColors.textSecondary),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
                   TextField(
+                    controller: _codeController,
                     decoration: const InputDecoration(
                       hintText: '输入授权码',
                       prefixIcon: Icon(Icons.vpn_key),
                     ),
-                    onSubmitted: (code) {
-                      if (code.isNotEmpty) _exchangeCode(code);
-                    },
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: _exchanging ? null : () {
-                        // 需要获取 TextField 的值，这里简化处理
-                      },
+                      onPressed: _exchanging
+                          ? null
+                          : () {
+                              final code = _codeController.text.trim();
+                              if (code.isNotEmpty) {
+                                _exchangeCode(code);
+                              }
+                            },
                       child: const Text('提交授权码'),
                     ),
                   ),
